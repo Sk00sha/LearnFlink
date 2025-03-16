@@ -16,7 +16,10 @@ import java.util.Map;
 public class WordCountRunner {
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        DataStream<String> fileStream = buildFileStream(env,new Path(buildFilePath("lines.txt")));
+        DataStream<String> fileStream = env.fromSource(
+                buildFileSource(new Path(buildFilePath("lines.txt"))),
+                WatermarkStrategy.noWatermarks(), // No event time processing
+                "File Source");
         fileStream.map(Sentence::new).flatMap(new WordCountFlatmap()).print();
 
         env.execute();
@@ -26,13 +29,9 @@ public class WordCountRunner {
         final String pattern = "{0}/{1}/{2}";
         return MessageFormat.format(pattern, System.getProperty("user.dir"), packageName,filename);
     }
-    private static DataStream<String> buildFileStream(StreamExecutionEnvironment env,Path filepath){
-        final FileSource<String> fileSource = FileSource.forRecordStreamFormat(new TextLineInputFormat(),filepath)
+    private static FileSource<String> buildFileSource(Path filepath){
+       return  FileSource.forRecordStreamFormat(new TextLineInputFormat(),filepath)
                         .build();
-       return env.fromSource(
-               fileSource,
-                WatermarkStrategy.noWatermarks(), // No event time processing
-                "File Source");
 
     }
 
