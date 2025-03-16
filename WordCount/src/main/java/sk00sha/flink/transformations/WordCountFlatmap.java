@@ -5,23 +5,26 @@ import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.api.common.functions.RichFlatMapFunction;
 import org.apache.flink.util.Collector;
 import sk00sha.flink.model.Sentence;
+import sk00sha.flink.model.WordWithCount;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class WordCountFlatmap extends RichFlatMapFunction<Sentence, Map<String,Integer>> {
-    private transient Map<String,Integer> wordcount;
+public class WordCountFlatmap extends RichFlatMapFunction<Sentence, WordWithCount> {
+    private  Map<String,Integer> wordcount = new HashMap<>();
     @Override
-    public void open(OpenContext openContext) throws Exception {
-        wordcount = new HashMap<>();
-    }
-
-    @Override
-    public void flatMap(Sentence s, Collector<Map<String,Integer>> collector) throws Exception {
+    public void flatMap(Sentence s, Collector<WordWithCount> collector) throws Exception {
         for (String word: s.sentence().split("[ ,]+")) {
-           wordcount.put(word,1);
+            if (wordcount.containsKey(word)) {
+                wordcount.put(word, wordcount.get(word)+1);
+            }
+            else wordcount.put(word,1);
+
         }
-        collector.collect(wordcount);
+        wordcount.forEach((key,v)->{
+            collector.collect(new WordWithCount(key,v));
+        });
+
 
     }
 }

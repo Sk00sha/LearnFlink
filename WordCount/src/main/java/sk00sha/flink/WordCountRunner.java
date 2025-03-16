@@ -17,7 +17,7 @@ public class WordCountRunner {
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         DataStream<String> fileStream = buildFileStream(env,new Path(buildFilePath("lines.txt")));
-        fileStream.map(Sentence::new).flatMap(new WordCountFlatmap()).returns(new TypeHint<Map<String, Integer>>() {}).print();
+        fileStream.map(Sentence::new).flatMap(new WordCountFlatmap()).print();
 
         env.execute();
     }
