@@ -12,6 +12,7 @@
         <module>CarTicketSystem</module>
         <module>WordCount</module>
         <module>ProductRecommender</module>
+        <module>WordCount</module>
     </modules>
 
     <properties>
