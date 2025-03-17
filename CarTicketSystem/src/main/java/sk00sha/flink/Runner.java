@@ -25,7 +25,6 @@ public class Runner {
         DataStream<String> carDataStream= env.fromSource(createKafkaSource(config), WatermarkStrategy.noWatermarks(),config.getString("app.name"), TypeInformation.of(String.class));
         carDataStream.print();
         env.execute();
-
     }
 
     private static KafkaSource<String> createKafkaSource(Configuration config){
