@@ -1,0 +1,8 @@
+# Ignore the entire .idea directory (optional)
+.idea/
+
+# But keep essential workspace files (if needed)
+!.idea/misc.xml
+!.idea/modules.xml
+!.idea/workspace.xml
+!.idea/runConfigurations/
