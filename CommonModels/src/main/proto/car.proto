@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+message Car {
+  enum Brand{
+    HONDA = 0;
+    MAZDA = 1;
+    HYUNDAI = 2;
+
+  }
+  int32 id = 2;
+  string licence_plate = 1;
+  string color = 3;
+  Brand carBrand = 4;
+}
